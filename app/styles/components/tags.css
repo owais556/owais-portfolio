@@ -96,17 +96,3 @@
   color: var(--color-fg);
   border-color: var(--color-border-alt);
 }
-
-/* Size variations — weight, not scale. */
-.skill-tag--lg {
-  font-weight: var(--font-weight-medium);
-  color: var(--color-fg-bold);
-}
-
-.skill-tag--md {
-  font-weight: var(--font-weight-normal);
-}
-
-.skill-tag--sm {
-  color: var(--color-fg-light);
-}

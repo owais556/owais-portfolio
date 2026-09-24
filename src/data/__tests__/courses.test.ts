@@ -3,7 +3,14 @@ import { describe, expect, it } from 'vitest';
 import courses from '../resume/courses';
 
 describe('courses data', () => {
-  it('exports an array of courses', () => {
+  // No verified courses yet: the resume page hides the section while this
+  // list is empty, so the empty state is asserted explicitly and the
+  // per-course checks below re-activate once real entries land.
+  it('is empty until verified courses are added', () => {
+    expect(courses).toEqual([]);
+  });
+
+  it.skipIf(courses.length === 0)('exports an array of courses', () => {
     expect(Array.isArray(courses)).toBe(true);
     expect(courses.length).toBeGreaterThan(0);
   });

@@ -12,12 +12,10 @@ describe('degrees data', () => {
     for (const degree of degrees) {
       expect(degree).toHaveProperty('school');
       expect(degree).toHaveProperty('degree');
-      expect(degree).toHaveProperty('link');
       expect(degree).toHaveProperty('year');
 
       expect(typeof degree.school).toBe('string');
       expect(typeof degree.degree).toBe('string');
-      expect(typeof degree.link).toBe('string');
       expect(typeof degree.year).toBe('number');
     }
   });
@@ -31,11 +29,13 @@ describe('degrees data', () => {
     }
   });
 
-  it('links are valid URLs', () => {
+  it('links, when present, are valid URLs', () => {
     const urlRegex = /^https?:\/\/.+/;
 
     for (const degree of degrees) {
-      expect(degree.link).toMatch(urlRegex);
+      if (degree.link) {
+        expect(degree.link).toMatch(urlRegex);
+      }
     }
   });
 
@@ -55,6 +55,15 @@ describe('degrees data', () => {
   it('each degree has a non-empty degree name', () => {
     for (const degree of degrees) {
       expect(degree.degree.trim().length).toBeGreaterThan(0);
+    }
+  });
+
+  it('each degree records its study period and result', () => {
+    for (const degree of degrees) {
+      expect(degree.period).toBeDefined();
+      expect(degree.period!.trim().length).toBeGreaterThan(0);
+      expect(degree.result).toBeDefined();
+      expect(degree.result!.trim().length).toBeGreaterThan(0);
     }
   });
 });

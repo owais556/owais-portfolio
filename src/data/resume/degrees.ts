@@ -1,22 +1,26 @@
 export interface Degree {
   school: string;
   degree: string;
-  link: string;
+  link?: string;
   year: number;
+  period?: string;
+  result?: string;
 }
 
 const degrees: Degree[] = [
   {
-    school: 'Stanford University',
-    degree: 'M.S. Computational and Mathematical Engineering (ICME)',
-    link: 'https://stanford.edu',
-    year: 2016,
+    school: 'Allama Iqbal Open University, Islamabad',
+    degree: 'Higher Secondary School Certificate (Intermediate) — General',
+    year: 2025,
+    period: '2021 – 2025',
+    result: '982 / 1400 — 70.1%',
   },
   {
-    school: 'University at Buffalo',
-    degree: 'B.S. Electrical Engineering, Computer Engineering',
-    link: 'https://buffalo.edu',
-    year: 2012,
+    school: 'Allama Iqbal Open University — Board of Secondary Education',
+    degree: 'Matriculation',
+    year: 2020,
+    period: '2018 – 2020',
+    result: '696 / 1100 — 63% (Grade B)',
   },
 ];
 

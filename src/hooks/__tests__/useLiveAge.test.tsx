@@ -6,9 +6,10 @@ import { ageAt, agePlaceholder } from '@/lib/telemetry';
 import useLiveAge from '../useLiveAge';
 
 const TEST_PRECISION = 8;
+const TEST_BIRTH_DATE = '1990-06-15T00:00:00Z';
 
 function LiveAge({ precision = TEST_PRECISION }: { precision?: number }) {
-  const ref = useLiveAge<HTMLSpanElement>(precision);
+  const ref = useLiveAge<HTMLSpanElement>(TEST_BIRTH_DATE, precision);
 
   return (
     <span data-testid="live-age" ref={ref}>
@@ -51,7 +52,9 @@ describe('useLiveAge', () => {
 
     expect(live).toBeDefined();
     expect(live).not.toMatch(/\d/);
-    expect(live).toHaveLength(ageAt(Date.now(), TEST_PRECISION).length);
+    expect(live).toHaveLength(
+      ageAt(TEST_BIRTH_DATE, Date.now(), TEST_PRECISION).length,
+    );
   });
 
   it('replaces the placeholder with a live reading', () => {
@@ -122,7 +125,7 @@ describe('useLiveAge', () => {
 
     function Counted() {
       renders += 1;
-      const ref = useLiveAge<HTMLSpanElement>(TEST_PRECISION);
+      const ref = useLiveAge<HTMLSpanElement>(TEST_BIRTH_DATE, TEST_PRECISION);
 
       return (
         <span data-testid="live-age" ref={ref}>

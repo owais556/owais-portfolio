@@ -19,15 +19,10 @@ export const metadata: Metadata = {
   description: SITE_DESCRIPTION,
   keywords: [
     AUTHOR_NAME,
-    'OpenAI',
-    'Promptfoo',
-    'Codex Security',
-    'AI security',
-    'application security',
-    'LLM security',
-    'machine learning',
-    'startup founder',
-    'YC',
+    'administration',
+    'customer service',
+    'digital & IT support',
+    'web development',
   ],
   authors: [{ name: AUTHOR_NAME }],
   creator: AUTHOR_NAME,
@@ -50,8 +45,8 @@ export const metadata: Metadata = {
   },
   // Only the snippet/preview hints are declared globally. `index, follow` is
   // already the default, and emitting it here meant every page that sets
-  // `noindex` — the 404, the legacy post route — shipped with contradictory
-  // robots tags that a crawler is free to resolve either way.
+  // `noindex` — the 404 — shipped with contradictory robots tags that a
+  // crawler is free to resolve either way.
   robots: {
     googleBot: {
       'max-video-preview': -1,

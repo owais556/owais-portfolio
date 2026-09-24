@@ -1,6 +1,5 @@
 export interface Skill {
   title: string;
-  competency: number;
   category: string[];
 }
 
@@ -9,116 +8,75 @@ export interface Category {
   color: string;
 }
 
+// The source resume lists skills without proficiency levels, so the schema
+// carries none: every tag renders identically and nothing on the page asserts
+// an unverified rating.
 const skills: Skill[] = [
-  // Languages
+  // Documentation
   {
-    title: 'Python',
-    competency: 5,
-    category: ['Languages', 'ML Engineering'],
+    title: 'Professional Documentation & MS Word',
+    category: ['Documentation', 'Professional Skills'],
   },
   {
-    title: 'TypeScript',
-    competency: 5,
-    category: ['Languages', 'Web Development'],
+    title: 'Advanced MS Word Formatting',
+    category: ['Documentation'],
   },
   {
-    title: 'SQL',
-    competency: 4,
-    category: ['Languages', 'Databases'],
+    title: 'Reports & Correspondence',
+    category: ['Communication', 'Documentation'],
   },
-  // AI & LLM
+  // Administration
   {
-    title: 'AI Agents',
-    competency: 5,
-    category: ['ML Engineering'],
+    title: 'Administrative Organization',
+    category: ['Administration', 'Professional Skills'],
   },
   {
-    title: 'LLM Evaluation',
-    competency: 5,
-    category: ['ML Engineering'],
+    title: 'Record-Keeping',
+    category: ['Administration'],
   },
   {
-    title: 'AI Red-teaming',
-    competency: 5,
-    category: ['ML Engineering'],
+    title: 'Digital File Management',
+    category: ['Administration', 'Digital Tools'],
+  },
+  // Communication
+  {
+    title: 'Client & Team Communication',
+    category: ['Communication'],
   },
   {
-    title: 'LLM APIs',
-    competency: 5,
-    category: ['ML Engineering'],
+    title: 'Customer Handling',
+    category: ['Communication'],
+  },
+  // Training & Coordination
+  {
+    title: 'Training Delivery',
+    category: ['Training & Coordination'],
   },
   {
-    title: 'RAG',
-    competency: 4,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'Prompt Engineering',
-    competency: 4,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'Vector Databases',
-    competency: 4,
-    category: ['ML Engineering', 'Databases'],
-  },
-  {
-    title: 'PyTorch',
-    competency: 4,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'Pandas',
-    competency: 5,
-    category: ['ML Engineering', 'Data Engineering'],
+    title: 'Coordination & Mentoring',
+    category: ['Professional Skills', 'Training & Coordination'],
   },
   // Web Development
   {
-    title: 'Node.js',
-    competency: 5,
+    title: 'AI-Assisted Web Development',
     category: ['Web Development'],
   },
   {
-    title: 'FastAPI',
-    competency: 4,
-    category: ['Web Development'],
+    title: 'GitHub',
+    category: ['Digital Tools', 'Web Development'],
   },
   {
-    title: 'Next.js',
-    competency: 3,
-    category: ['Web Development'],
+    title: 'Vercel',
+    category: ['Digital Tools', 'Web Development'],
   },
-  // Databases
+  // Content & Social Media
   {
-    title: 'PostgreSQL',
-    competency: 4,
-    category: ['Databases'],
+    title: 'Social Media Management',
+    category: ['Content & Social Media', 'Digital Tools'],
   },
   {
-    title: 'Redis',
-    competency: 3,
-    category: ['Databases'],
-  },
-  // Infrastructure
-  {
-    title: 'AWS',
-    competency: 4,
-    category: ['Infrastructure'],
-  },
-  {
-    title: 'Docker',
-    competency: 4,
-    category: ['Infrastructure'],
-  },
-  {
-    title: 'Kubernetes',
-    competency: 3,
-    category: ['Infrastructure'],
-  },
-  {
-    title: 'Observability',
-    competency: 4,
-    category: ['Infrastructure', 'ML Engineering'],
+    title: 'Digital Content Creation',
+    category: ['Content & Social Media'],
   },
 ].map((skill) => ({ ...skill, category: skill.category.sort() }));
 

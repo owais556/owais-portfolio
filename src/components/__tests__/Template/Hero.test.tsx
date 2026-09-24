@@ -15,32 +15,23 @@ describe('Hero', () => {
     render(<Hero />);
 
     const heading = screen.getByRole('heading', { level: 1 });
-    expect(heading).toHaveTextContent("Michael D'Angelo");
+    expect(heading).toHaveTextContent('Muhammad Owais');
   });
 
-  it('describes the current work and Promptfoo joining OpenAI', () => {
+  it('describes the current role, employer, and focus', () => {
     const { container } = render(<Hero />);
 
-    const openAiLink = screen.getByRole('link', { name: /openai/i });
-    expect(openAiLink).toHaveAttribute('href', 'https://openai.com');
-    expect(openAiLink).toHaveClass('hero-highlight');
-
-    const promptfooLink = screen.getByRole('link', { name: /promptfoo/i });
-    expect(promptfooLink).toHaveAttribute('href', 'https://promptfoo.dev');
-    expect(promptfooLink).toHaveClass('hero-highlight');
-
-    const codexSecurityLink = screen.getByRole('link', {
-      name: 'Codex Security',
-    });
-    expect(codexSecurityLink).toHaveAttribute(
-      'href',
-      'https://openai.com/index/codex-security-now-in-research-preview/',
-    );
-    expect(codexSecurityLink).toHaveClass('hero-highlight');
-
     expect(container.querySelector('.hero-tagline')).toHaveTextContent(
-      "I'm a Member of the Technical Staff at OpenAI, working on Promptfoo and Codex Security. I help secure AI systems and use AI to find software vulnerabilities. I co-founded Promptfoo before it joined OpenAI in 2026.",
+      "I'm a Clerk at Asim Higher Secondary School in Tando Muhammad Khan, Sindh, Pakistan, working across Administration, Customer Service, Digital & IT Support, and Web Development.",
     );
+  });
+
+  it('invents no hero links without verified targets', () => {
+    const { container } = render(<Hero />);
+
+    // The employer and projects have no verified URLs yet, so the tagline
+    // is plain text rather than links to invented destinations.
+    expect(container.querySelectorAll('.hero-tagline a')).toHaveLength(0);
   });
 
   it('keeps personal stats and incomplete credential lists off the homepage', () => {

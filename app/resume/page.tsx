@@ -17,7 +17,7 @@ import { AUTHOR_NAME, SITE_URL } from '@/lib/utils';
 
 export const metadata: Metadata = createPageMetadata({
   title: 'Resume',
-  description: `${AUTHOR_NAME}'s Resume. OpenAI, Promptfoo, Smile ID, Arthena, Matroid, Stanford ICME, YC alum.`,
+  description: `${AUTHOR_NAME}'s Resume. Clerk at Asim Higher Secondary School — administration, customer service, digital & IT support, and web development.`,
   path: '/resume/',
 });
 
@@ -28,12 +28,9 @@ export default function ResumePage() {
         <header className="resume-header">
           <h1 className="resume-title">Resume</h1>
           <p className="resume-summary">
-            Engineering leader with 15+ years building products across AI,
-            security, and infrastructure. I&apos;m currently a Member of the
-            Technical Staff at OpenAI, working on Promptfoo and Codex Security.
-            I help secure AI systems and use AI to find software
-            vulnerabilities. I co-founded Promptfoo before it joined OpenAI in
-            2026. Stanford MS, YC alum, previously VP Engineering.
+            Clerk at Asim Higher Secondary School in Tando Muhammad Khan, Sindh,
+            working across administration, customer service, digital &amp; IT
+            support, and web development.
           </p>
           {/* Print-only, but real markup rather than CSS `content`, so it is
               selectable, linkable, and reads from the shared profile. The
@@ -43,7 +40,7 @@ export default function ResumePage() {
             <span aria-hidden="true"> · </span>
             <a href={`mailto:${profile.email}`}>{profile.email}</a>
             <span aria-hidden="true"> · </span>
-            <a href="https://github.com/mldangelo">github.com/mldangelo</a>
+            <a href="https://github.com/owais556">github.com/owais556</a>
           </address>
         </header>
 
@@ -54,17 +51,21 @@ export default function ResumePage() {
             <Experience data={work} />
           </section>
 
-          <section id="education" className="resume-section">
-            <Education data={degrees} />
-          </section>
+          {degrees.length > 0 && (
+            <section id="education" className="resume-section">
+              <Education data={degrees} />
+            </section>
+          )}
 
           <section id="skills" className="resume-section">
             <Skills skills={skills} categories={categories} />
           </section>
 
-          <section id="courses" className="resume-section">
-            <Courses data={courses} />
-          </section>
+          {courses.length > 0 && (
+            <section id="courses" className="resume-section">
+              <Courses data={courses} />
+            </section>
+          )}
 
           <section id="references" className="resume-section">
             <References />

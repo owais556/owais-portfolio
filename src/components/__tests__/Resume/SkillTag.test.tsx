@@ -10,46 +10,27 @@ const mockCategories = [
 
 describe('SkillTag', () => {
   it('renders the skill title', () => {
-    const skill = { title: 'Python', competency: 5, category: ['Languages'] };
+    const skill = { title: 'Python', category: ['Languages'] };
 
     render(<SkillTag data={skill} categories={mockCategories} />);
 
     expect(screen.getByText('Python')).toBeInTheDocument();
   });
 
-  it('applies large size class for competency 5', () => {
-    const skill = { title: 'Python', competency: 5, category: ['Languages'] };
+  // Skills carry no proficiency rating: the resume lists skills without
+  // levels, so the tag must not assert one via tooltip or accessible name.
+  it('renders no proficiency claim', () => {
+    const skill = { title: 'Python', category: ['Languages'] };
 
     render(<SkillTag data={skill} categories={mockCategories} />);
 
     const tag = document.querySelector('.skill-tag');
-    expect(tag).toHaveClass('skill-tag--lg');
-  });
-
-  it('applies medium size class for competency 4', () => {
-    const skill = {
-      title: 'JavaScript',
-      competency: 4,
-      category: ['Languages'],
-    };
-
-    render(<SkillTag data={skill} categories={mockCategories} />);
-
-    const tag = document.querySelector('.skill-tag');
-    expect(tag).toHaveClass('skill-tag--md');
-  });
-
-  it('applies small size class for competency 3 or below', () => {
-    const skill = { title: 'Ruby', competency: 3, category: ['Languages'] };
-
-    render(<SkillTag data={skill} categories={mockCategories} />);
-
-    const tag = document.querySelector('.skill-tag');
-    expect(tag).toHaveClass('skill-tag--sm');
+    expect(tag).not.toHaveAttribute('title');
+    expect(tag).not.toHaveAttribute('aria-label');
   });
 
   it('sets category color as CSS variable', () => {
-    const skill = { title: 'Python', competency: 5, category: ['Languages'] };
+    const skill = { title: 'Python', category: ['Languages'] };
 
     render(<SkillTag data={skill} categories={mockCategories} />);
 
@@ -60,7 +41,6 @@ describe('SkillTag', () => {
   it('uses first matching category color for multi-category skills', () => {
     const skill = {
       title: 'Python',
-      competency: 5,
       category: ['Languages', 'ML Engineering'],
     };
 

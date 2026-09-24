@@ -1,5 +1,6 @@
 import writing from '@/data/writing';
 import { getAllPosts } from '@/lib/posts';
+import { WRITING_DESCRIPTION } from '@/lib/schema';
 import { AUTHOR_NAME, SITE_URL } from '@/lib/utils';
 
 export const dynamic = 'force-static';
@@ -72,7 +73,7 @@ export async function GET() {
   <channel>
     <title>${escapeXml(AUTHOR_NAME)} - Writing</title>
     <link>${SITE_URL}/writing/</link>
-    <description>Articles on AI security, LLM red teaming, and trust &amp; safety by ${escapeXml(AUTHOR_NAME)}.</description>
+    <description>${escapeXml(WRITING_DESCRIPTION)} by ${escapeXml(AUTHOR_NAME)}.</description>
     <language>en-us</language>
     <lastBuildDate>${lastBuildDate}</lastBuildDate>
     <atom:link href="${SITE_URL}/feed.xml" rel="self" type="application/rss+xml"/>${rssItems}

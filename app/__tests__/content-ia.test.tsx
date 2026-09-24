@@ -5,54 +5,101 @@ import { getWritingItems } from '@/lib/writing';
 import HomePage from '../page';
 import WritingPage from '../writing/page';
 
+const datedItems = getWritingItems().filter((item) => item.date);
+
 describe('writing information architecture', () => {
-  it('surfaces the three newest dated items on the homepage', () => {
-    const expected = getWritingItems()
-      .filter((item) => item.date)
-      .slice(0, 3);
+  // Until posts or external links exist, the homepage hides the section
+  // rather than showing an empty "Latest writing" heading.
+  it.skipIf(datedItems.length > 0)(
+    'hides the homepage writing section when there is nothing to list',
+    () => {
+      render(<HomePage />);
 
-    const { container } = render(<HomePage />);
-    const section = screen.getByRole('region', { name: 'Latest writing' });
-    const cards = container.querySelectorAll('.home-writing-item');
+      expect(
+        screen.queryByRole('region', { name: 'Latest writing' }),
+      ).not.toBeInTheDocument();
+    },
+  );
 
-    expect(cards).toHaveLength(3);
-    expect(
-      [...cards].map((card) => card.querySelector('h3')?.textContent),
-    ).toEqual(expected.map((item) => item.title));
-    expect(
-      within(section).getByRole('link', { name: 'View all' }),
-    ).toHaveAttribute('href', '/writing');
-  });
+  it.skipIf(datedItems.length === 0)(
+    'surfaces the three newest dated items on the homepage',
+    () => {
+      const expected = datedItems.slice(0, 3);
 
-  it('groups owned essays, external articles, and guides under real headings', () => {
-    const { container } = render(<WritingPage />);
+      const { container } = render(<HomePage />);
+      const section = screen.getByRole('region', { name: 'Latest writing' });
+      const cards = container.querySelectorAll('.home-writing-item');
 
-    expect(
-      screen.getByRole('heading', { level: 2, name: 'Essays on this site' }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', {
-        level: 2,
-        name: 'Selected writing elsewhere',
-      }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { level: 2, name: 'Guides' }),
-    ).toBeInTheDocument();
+      expect(cards).toHaveLength(3);
+      expect(
+        [...cards].map((card) => card.querySelector('h3')?.textContent),
+      ).toEqual(expected.map((item) => item.title));
+      expect(
+        within(section).getByRole('link', { name: 'View all' }),
+      ).toHaveAttribute('href', '/writing');
+    },
+  );
 
-    expect(container.querySelectorAll('.writing-item h3')).toHaveLength(
-      getWritingItems().length,
-    );
-  });
+  // Empty sections render no heading at all — a bare "Essays on this site"
+  // label with nothing under it would be worse than no label.
+  it.skipIf(getWritingItems().length > 0)(
+    'hides empty writing groups instead of bare headings',
+    () => {
+      render(<WritingPage />);
 
-  it('features exactly the newest dated item, wherever it is grouped', () => {
-    const newest = getWritingItems().find((item) => item.date);
-    const { container } = render(<WritingPage />);
-    const featured = container.querySelectorAll('.writing-item--featured');
+      expect(
+        screen.queryByRole('heading', {
+          level: 2,
+          name: 'Essays on this site',
+        }),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('heading', {
+          level: 2,
+          name: 'Selected writing elsewhere',
+        }),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('heading', { level: 2, name: 'Guides' }),
+      ).not.toBeInTheDocument();
+    },
+  );
 
-    expect(featured).toHaveLength(1);
-    expect(featured[0]).toHaveAttribute('href', newest?.url);
-  });
+  it.skipIf(getWritingItems().length === 0)(
+    'groups owned essays, external articles, and guides under real headings',
+    () => {
+      const { container } = render(<WritingPage />);
+
+      expect(
+        screen.getByRole('heading', {
+          level: 2,
+          name: 'Essays on this site',
+        }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('heading', {
+          level: 2,
+          name: 'Selected writing elsewhere',
+        }),
+      ).toBeInTheDocument();
+
+      expect(container.querySelectorAll('.writing-item h3')).toHaveLength(
+        getWritingItems().length,
+      );
+    },
+  );
+
+  it.skipIf(datedItems.length === 0)(
+    'features exactly the newest dated item, wherever it is grouped',
+    () => {
+      const newest = datedItems[0];
+      const { container } = render(<WritingPage />);
+      const featured = container.querySelectorAll('.writing-item--featured');
+
+      expect(featured).toHaveLength(1);
+      expect(featured[0]).toHaveAttribute('href', newest.url);
+    },
+  );
 
   it('shows provenance beside every external-link arrow', () => {
     const externalItems = getWritingItems().filter((item) => item.isExternal);

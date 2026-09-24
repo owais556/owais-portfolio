@@ -7,15 +7,14 @@ import profile from '@/data/profile.json';
 // Site configuration
 export const SITE_URL = 'https://mldangelo.com';
 export const AUTHOR_NAME = profile.name;
-export const TWITTER_HANDLE = '@dangelosaurus';
 /**
  * The portrait. Used for JSON-LD `image`, where the value should be a picture
  * of the person, not a designed card.
  */
-export const SITE_IMAGE_PATH = '/images/me.jpg';
+export const SITE_IMAGE_PATH = '/images/gpt.me.png';
 export const SITE_IMAGE_DIMENSIONS = {
-  width: 1024,
-  height: 1024,
+  width: 1254,
+  height: 1254,
 } as const;
 
 /**
@@ -35,16 +34,13 @@ export const SHARE_IMAGE_DIMENSIONS = {
 
 // Canonical one-line bio, shared across page metadata, OpenGraph, and JSON-LD.
 export const SITE_DESCRIPTION =
-  'Member of the Technical Staff at OpenAI, working on Promptfoo and Codex Security. Co-founded Promptfoo before it joined OpenAI in 2026.';
+  'Clerk at Asim Higher Secondary School, working across administration, customer service, digital & IT support, and web development.';
 
 // Image dimension constants
 export const PROJECT_IMAGE = {
   width: 600,
   height: 400,
 } as const;
-
-// Skill competency
-export const MAX_COMPETENCY = 5;
 
 /**
  * Formats a date string to a human-readable format.

@@ -2,21 +2,29 @@
 
 import { useEffect, useState } from 'react';
 
-const sections = [
-  { name: 'Experience', id: 'experience' },
-  { name: 'Education', id: 'education' },
-  { name: 'Skills', id: 'skills' },
-  { name: 'Courses', id: 'courses' },
-  { name: 'References', id: 'references' },
-] as const;
+import courses from '@/data/resume/courses';
+import degrees from '@/data/resume/degrees';
 
-type SectionId = (typeof sections)[number]['id'];
+interface Section {
+  name: string;
+  id: string;
+}
+
+// Education and Courses appear only when they carry entries — an empty
+// section would render a heading with nothing under it.
+const sections: Section[] = [
+  { name: 'Experience', id: 'experience' },
+  ...(degrees.length > 0 ? [{ name: 'Education', id: 'education' }] : []),
+  { name: 'Skills', id: 'skills' },
+  ...(courses.length > 0 ? [{ name: 'Courses', id: 'courses' }] : []),
+  { name: 'References', id: 'references' },
+];
 
 /** Offset from top of viewport for intersection detection (header height + nav) */
 const INTERSECTION_MARGIN = '-20% 0px -75% 0px';
 
 export default function ResumeNav() {
-  const [activeSection, setActiveSection] = useState<SectionId>('experience');
+  const [activeSection, setActiveSection] = useState<string>('experience');
 
   useEffect(() => {
     // Check if IntersectionObserver is available (not in test environment)

@@ -108,4 +108,10 @@ describe('tierFor', () => {
       ),
     ).toBe('primary');
   });
+
+  it('leads a single role with no dates to compare against', () => {
+    const role = position({ startDate: undefined, endDate: undefined });
+
+    expect(tierFor(role, [role])).toBe('lead');
+  });
 });

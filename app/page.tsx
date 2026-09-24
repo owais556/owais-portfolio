@@ -31,51 +31,53 @@ export default function HomePage() {
         nodes={[profilePageNode({ url: HOME_URL, name: AUTHOR_NAME })]}
       />
       <Hero />
-      <section className="home-writing" aria-labelledby="home-writing-title">
-        <div className="home-writing-header">
-          <div>
-            <span className="home-section-kicker">Recent signal</span>
-            <h2 id="home-writing-title">Latest writing</h2>
+      {recentWriting.length > 0 && (
+        <section className="home-writing" aria-labelledby="home-writing-title">
+          <div className="home-writing-header">
+            <div>
+              <span className="home-section-kicker">Recent signal</span>
+              <h2 id="home-writing-title">Latest writing</h2>
+            </div>
+            <Link href="/writing/" className="home-writing-all">
+              View all
+            </Link>
           </div>
-          <Link href="/writing/" className="home-writing-all">
-            View all
-          </Link>
-        </div>
-        <div className="home-writing-list">
-          {recentWriting.map((item) => {
-            const content = (
-              <>
-                <span className="home-writing-meta">
-                  {formatDate(item.date)} · {item.source}
-                </span>
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-              </>
-            );
+          <div className="home-writing-list">
+            {recentWriting.map((item) => {
+              const content = (
+                <>
+                  <span className="home-writing-meta">
+                    {formatDate(item.date)} · {item.source}
+                  </span>
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                </>
+              );
 
-            return item.isExternal ? (
-              <a
-                key={item.url}
-                href={item.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="home-writing-item"
-              >
-                {content}
-                <span className="sr-only"> (opens in a new tab)</span>
-              </a>
-            ) : (
-              <Link
-                key={item.url}
-                href={item.url}
-                className="home-writing-item"
-              >
-                {content}
-              </Link>
-            );
-          })}
-        </div>
-      </section>
+              return item.isExternal ? (
+                <a
+                  key={item.url}
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="home-writing-item"
+                >
+                  {content}
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </a>
+              ) : (
+                <Link
+                  key={item.url}
+                  href={item.url}
+                  className="home-writing-item"
+                >
+                  {content}
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
     </PageWrapper>
   );
 }

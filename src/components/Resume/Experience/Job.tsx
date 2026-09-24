@@ -24,27 +24,35 @@ export default function Job({ data, tier = 'primary' }: JobProps) {
     >
       <span className="job-marker" aria-hidden="true" />
 
-      <p className="daterange">
-        <time dateTime={startDate}>{dayjs(startDate).format('MMMM YYYY')}</time>
-        {/* The dash is decorative, so a screen reader would otherwise run the
-            dates together as "March 2026 Present". */}
-        <span className="daterange-sep" aria-hidden="true">
-          –
-        </span>
-        <span className="sr-only"> to </span>
-        {endDate ? (
-          <time dateTime={endDate}>{dayjs(endDate).format('MMMM YYYY')}</time>
-        ) : (
-          <span className="daterange-present">Present</span>
-        )}
-      </p>
+      {startDate ? (
+        <p className="daterange">
+          <time dateTime={startDate}>
+            {dayjs(startDate).format('MMMM YYYY')}
+          </time>
+          {/* The dash is decorative, so a screen reader would otherwise run the
+              dates together as "March 2026 Present". */}
+          <span className="daterange-sep" aria-hidden="true">
+            –
+          </span>
+          <span className="sr-only"> to </span>
+          {endDate ? (
+            <time dateTime={endDate}>{dayjs(endDate).format('MMMM YYYY')}</time>
+          ) : (
+            <span className="daterange-present">Present</span>
+          )}
+        </p>
+      ) : null}
 
       <div className="job-body">
         <header>
           <h3>
-            <a href={url} className="job-company">
-              {name}
-            </a>
+            {url ? (
+              <a href={url} className="job-company">
+                {name}
+              </a>
+            ) : (
+              <span className="job-company">{name}</span>
+            )}
             <span className="job-position">{position}</span>
           </h3>
         </header>

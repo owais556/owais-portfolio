@@ -1,20 +1,14 @@
-# Michael D'Angelo: Personal Site
+# Muhammad Owais: Personal Site
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/mldangelo/personal-site/node.js.yml?branch=main)](https://github.com/mldangelo/personal-site/actions)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
-[![GitHub Stars](https://img.shields.io/github/stars/mldangelo/personal-site?style=social)](https://github.com/mldangelo/personal-site/stargazers)
-[![GitHub Forks](https://img.shields.io/github/forks/mldangelo/personal-site?style=social)](https://github.com/mldangelo/personal-site/network/members)
-
-The source for [mldangelo.com](https://mldangelo.com), a portfolio, résumé,
+The source for Muhammad Owais's personal site — a portfolio, résumé,
 project archive, and writing site built with
 [Next.js](https://nextjs.org/), [React](https://react.dev/),
 [TypeScript](https://www.typescriptlang.org/), and
 [Tailwind CSS](https://tailwindcss.com/).
 
+Forked from [mldangelo/personal-site](https://github.com/mldangelo/personal-site).
 The architecture is reusable and MIT licensed. The content and visual design
 are personal, so a fork needs a full rebrand.
-
-**[Visit the live site →](https://mldangelo.com)**
 
 ## What is here
 

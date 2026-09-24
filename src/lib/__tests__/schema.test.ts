@@ -31,11 +31,21 @@ const START_OF_FRAME_MARKERS = new Set([
   0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf,
 ]);
 
-function readJpegDimensions(filePath: string) {
+function readImageDimensions(filePath: string) {
   const buffer = fs.readFileSync(filePath);
 
+  const pngSignature = Buffer.from([
+    0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a,
+  ]);
+  if (buffer.subarray(0, 8).equals(pngSignature)) {
+    return {
+      width: buffer.readUInt32BE(16),
+      height: buffer.readUInt32BE(20),
+    };
+  }
+
   if (buffer[0] !== 0xff || buffer[1] !== 0xd8) {
-    throw new Error(`Expected a JPEG file at ${filePath}`);
+    throw new Error(`Expected a JPEG or PNG file at ${filePath}`);
   }
 
   let offset = 2;
@@ -93,15 +103,15 @@ describe('personNode', () => {
   it('uses author name and split given/family names', () => {
     const node = personNode();
     expect(node.name).toBe(AUTHOR_NAME);
-    expect(node.givenName).toBe('Michael');
-    expect(node.familyName).toBe("D'Angelo");
+    expect(node.givenName).toBe('Muhammad');
+    expect(node.familyName).toBe('Owais');
   });
 
   it('exposes an ImageObject and social sameAs links', () => {
     const node = personNode();
     const image = node.image as Record<string, unknown>;
     expect(image['@type']).toBe('ImageObject');
-    expect(image.url).toBe(`${SITE_URL}/images/me.jpg`);
+    expect(image.url).toBe(`${SITE_URL}${SITE_IMAGE_PATH}`);
     expect(image.width).toBe(SITE_IMAGE_DIMENSIONS.width);
     expect(image.height).toBe(SITE_IMAGE_DIMENSIONS.height);
     expect(Array.isArray(node.sameAs)).toBe(true);
@@ -112,9 +122,10 @@ describe('personNode', () => {
     const node = personNode();
     const worksFor = node.worksFor as Record<string, unknown>;
     expect(worksFor['@type']).toBe('Organization');
-    expect(worksFor.name).toBe('OpenAI');
+    expect(worksFor.name).toBe('Asim Higher Secondary School');
     const alumniOf = node.alumniOf as Record<string, unknown>[];
     expect(alumniOf[0]['@type']).toBe('CollegeOrUniversity');
+    expect(alumniOf.length).toBeGreaterThan(0);
   });
 });
 
@@ -268,6 +279,6 @@ describe('site image metadata', () => {
       SITE_IMAGE_PATH.replace(/^\//, ''),
     );
 
-    expect(SITE_IMAGE_DIMENSIONS).toEqual(readJpegDimensions(imagePath));
+    expect(SITE_IMAGE_DIMENSIONS).toEqual(readImageDimensions(imagePath));
   });
 });

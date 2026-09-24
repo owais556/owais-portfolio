@@ -38,12 +38,18 @@ function isEarlyCareer(job: Position): boolean {
 export function tierFor(job: Position, positions: Position[]): JobTier {
   if (isEarlyCareer(job)) return 'early';
 
-  const newestStartDate = positions
+  const startDates = positions
     .filter((position) => !isEarlyCareer(position))
     .map((position) => position.startDate)
-    .sort((a, b) => b.localeCompare(a))[0];
+    .filter((startDate): startDate is string => Boolean(startDate))
+    .sort((a, b) => b.localeCompare(a));
 
-  if (job.startDate === newestStartDate) {
+  // A role with no dates of its own and nothing dated to compare against —
+  // e.g. a single current role whose dates are not public yet — leads by
+  // default rather than floating as 'primary'.
+  if (!job.startDate && startDates.length === 0) return 'lead';
+
+  if (job.startDate && job.startDate === startDates[0]) {
     return 'lead';
   }
 

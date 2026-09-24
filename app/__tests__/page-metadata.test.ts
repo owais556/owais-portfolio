@@ -91,28 +91,36 @@ describe('page metadata', () => {
     });
   });
 
-  it('declares a canonical url for blog posts', async () => {
-    const [slug] = getPostSlugs();
-    const metadata = await generatePostMetadata({
-      params: Promise.resolve({ slug }),
-    });
+  it.skipIf(getPostSlugs().length === 0)(
+    'declares a canonical url for blog posts',
+    async () => {
+      const [slug] = getPostSlugs();
+      const metadata = await generatePostMetadata({
+        params: Promise.resolve({ slug }),
+      });
 
-    expect(metadata.alternates?.canonical).toBe(`${SITE_URL}/writing/${slug}/`);
-  });
+      expect(metadata.alternates?.canonical).toBe(
+        `${SITE_URL}/writing/${slug}/`,
+      );
+    },
+  );
 
-  it('declares the share card on blog posts', async () => {
-    const [slug] = getPostSlugs();
-    const metadata = await generatePostMetadata({
-      params: Promise.resolve({ slug }),
-    });
+  it.skipIf(getPostSlugs().length === 0)(
+    'declares the share card on blog posts',
+    async () => {
+      const [slug] = getPostSlugs();
+      const metadata = await generatePostMetadata({
+        params: Promise.resolve({ slug }),
+      });
 
-    expect(JSON.stringify(metadata.openGraph?.images)).toContain(
-      SHARE_IMAGE_PATH,
-    );
-    expect(JSON.stringify(metadata.twitter?.images)).toContain(
-      SHARE_IMAGE_PATH,
-    );
-  });
+      expect(JSON.stringify(metadata.openGraph?.images)).toContain(
+        SHARE_IMAGE_PATH,
+      );
+      expect(JSON.stringify(metadata.twitter?.images)).toContain(
+        SHARE_IMAGE_PATH,
+      );
+    },
+  );
 
   it('overrides 404 share metadata without inventing a canonical url', () => {
     expect(notFoundMetadata.openGraph?.url).toBeUndefined();

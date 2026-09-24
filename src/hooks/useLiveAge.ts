@@ -34,6 +34,7 @@ import usePrefersReducedMotion from './usePrefersReducedMotion';
  * - Ticking pauses while the tab is hidden, and resyncs on return.
  */
 export default function useLiveAge<T extends HTMLElement = HTMLSpanElement>(
+  birthDate: string,
   precision: number,
 ): RefObject<T | null> {
   const ref = useRef<T>(null);
@@ -47,7 +48,7 @@ export default function useLiveAge<T extends HTMLElement = HTMLSpanElement>(
     }
 
     const tick = () => {
-      node.textContent = ageAt(Date.now(), precision);
+      node.textContent = ageAt(birthDate, Date.now(), precision);
     };
     const interval = ageIntervalFor(precision);
     let timer: ReturnType<typeof setInterval> | undefined;
@@ -82,7 +83,7 @@ export default function useLiveAge<T extends HTMLElement = HTMLSpanElement>(
       // remount does not inherit a stale reading.
       node.textContent = agePlaceholder(precision);
     };
-  }, [precision, prefersReducedMotion]);
+  }, [birthDate, precision, prefersReducedMotion]);
 
   return ref;
 }

@@ -90,9 +90,18 @@ describe('EmailLink', () => {
 
       // The flash is a *jump* to the complete address from some other alias
       // already several characters long. Looping re-types the address
-      // legitimately, but that grows "h" -> "hi", so the previous frame is a
-      // single character and this guard leaves it alone.
-      if (previous.length > 1 && previous !== localPart) {
+      // legitimately, one character at a time, so a transition from a proper
+      // prefix of the address is typing and leaves this guard alone. Staying
+      // on the full address is the hold after it lands — the opening frame
+      // and every loop wrap hold there — so `previous === localPart` is
+      // legitimate too. Only unrelated aliases must not resolve to it.
+      const isTypingTheAddress =
+        previous !== localPart && localPart.startsWith(previous);
+      if (
+        previous.length > 1 &&
+        previous !== localPart &&
+        !isTypingTheAddress
+      ) {
         expect(shown).not.toBe(localPart);
       }
 

@@ -10,19 +10,17 @@ const mockCategories = [
 ];
 
 const mockSkills = [
-  { title: 'Python', competency: 5, category: ['Languages', 'ML Engineering'] },
+  { title: 'Python', category: ['Languages', 'ML Engineering'] },
   {
     title: 'TypeScript',
-    competency: 5,
     category: ['Languages', 'Web Development'],
   },
   {
     title: 'JavaScript',
-    competency: 4,
     category: ['Languages', 'Web Development'],
   },
-  { title: 'PyTorch', competency: 4, category: ['ML Engineering'] },
-  { title: 'React', competency: 3, category: ['Web Development'] },
+  { title: 'PyTorch', category: ['ML Engineering'] },
+  { title: 'React', category: ['Web Development'] },
 ];
 
 /**
@@ -152,7 +150,7 @@ describe('Skills', () => {
     expect(groupTitles.length).toBeGreaterThan(0);
   });
 
-  it('sorts skills by competency (highest first)', () => {
+  it('sorts skills alphabetically within a group', () => {
     render(<Skills skills={mockSkills} categories={mockCategories} />);
 
     // Filter to Languages to check sorting
@@ -161,9 +159,9 @@ describe('Skills', () => {
     const skillTags = document.querySelectorAll('.skill-tag-name');
     const skillNames = Array.from(skillTags).map((el) => el.textContent);
 
-    // Python (5) and TypeScript (5) should come before JavaScript (4)
+    // JavaScript should come before Python alphabetically
     const jsIndex = skillNames.indexOf('JavaScript');
     const pythonIndex = skillNames.indexOf('Python');
-    expect(pythonIndex).toBeLessThan(jsIndex);
+    expect(jsIndex).toBeLessThan(pythonIndex);
   });
 });

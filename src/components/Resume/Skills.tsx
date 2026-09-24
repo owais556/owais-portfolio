@@ -52,10 +52,9 @@ export default function Skills({ skills, categories }: SkillsProps) {
    * markup lets `print.css` show everything regardless.
    */
   const groupedSkills = useMemo(() => {
-    const sortedSkills = [...skills].sort((a, b) => {
-      if (a.competency !== b.competency) return b.competency - a.competency;
-      return a.title.localeCompare(b.title);
-    });
+    const sortedSkills = [...skills].sort((a, b) =>
+      a.title.localeCompare(b.title),
+    );
 
     return categories
       .map((category) => ({

@@ -11,13 +11,9 @@ describe('projects data', () => {
   it('each project has required properties', () => {
     for (const project of projects) {
       expect(project).toHaveProperty('title');
-      expect(project).toHaveProperty('image');
-      expect(project).toHaveProperty('date');
       expect(project).toHaveProperty('desc');
 
       expect(typeof project.title).toBe('string');
-      expect(typeof project.image).toBe('string');
-      expect(typeof project.date).toBe('string');
       expect(typeof project.desc).toBe('string');
     }
   });
@@ -34,16 +30,20 @@ describe('projects data', () => {
     }
   });
 
-  it('image paths start with /', () => {
+  it('image paths start with / when present', () => {
     for (const project of projects) {
-      expect(project.image.startsWith('/')).toBe(true);
+      if (project.image) {
+        expect(project.image.startsWith('/')).toBe(true);
+      }
     }
   });
 
-  it('dates are valid date strings', () => {
+  it('dates are valid date strings when present', () => {
     for (const project of projects) {
-      const date = new Date(project.date);
-      expect(date.toString()).not.toBe('Invalid Date');
+      if (project.date) {
+        const date = new Date(project.date);
+        expect(date.toString()).not.toBe('Invalid Date');
+      }
     }
   });
 
