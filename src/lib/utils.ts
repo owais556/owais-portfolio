@@ -5,7 +5,7 @@
 import profile from '@/data/profile.json';
 
 // Site configuration
-export const SITE_URL = 'https://mldangelo.com';
+export const SITE_URL = 'https://owais-portfolio.vercel.app';
 export const AUTHOR_NAME = profile.name;
 /**
  * The portrait. Used for JSON-LD `image`, where the value should be a picture
