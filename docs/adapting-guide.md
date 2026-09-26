@@ -111,7 +111,7 @@ Identity data starts in shared files, but some text and links are hard-coded.
 | Logo initials                                                  | `src/components/Template/Navigation.tsx`                                |
 | Footer source link                                             | `src/components/Template/Footer.tsx`                                    |
 | Portrait and its alt text                                      | `public/images/gpt.me.png`, `src/components/Template/ThemePortrait.tsx` |
-| Favicon files and web app name                                 | `public/images/favicon/`                                                |
+| Favicon files and web app name                                 | `app/favicon.ico`                                                       |
 | Sitemap URL for crawlers                                       | `public/robots.txt`                                                     |
 | RSS title and description                                      | `app/feed.xml/route.ts`                                                 |
 | Repository statistics and GitHub API URL                       | `src/components/Stats/Site.tsx`, `src/data/stats/site.ts`               |
@@ -189,7 +189,7 @@ build after the refactor.
 | Light and dark colors      | `app/styles/tokens/colors.css`          |
 | Type scale                 | `app/styles/tokens/typography.css`      |
 | Font files and assignments | `app/fonts.ts`                          |
-| Favicon                    | `public/images/favicon/`                |
+| Favicon                    | `app/favicon.ico`                       |
 | Default metadata           | `app/layout.tsx`, `src/lib/metadata.ts` |
 | Share-card generator       | `scripts/generate-og.mjs`               |
 

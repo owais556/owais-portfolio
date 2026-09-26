@@ -30,7 +30,7 @@ src/data/             → Static data (resume, projects, contact)
 src/hooks/            → Custom React hooks
 content/writing/      → Blog posts (Markdown with frontmatter)
 src/data/writing.ts   → External writing links shown on `/writing`
-public/images/        → Images and favicons
+public/images/         → Site images (hero portrait); favicon lives at app/favicon.ico
 docs/                 → Documentation
 ```
 
