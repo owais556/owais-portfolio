@@ -15,6 +15,15 @@ describe('ContactIcons', () => {
       expect.stringContaining('github.com'),
     );
 
+    // Instagram opens the profile in a new tab on one click
+    const instagramLink = screen.getByRole('link', { name: /instagram/i });
+    expect(instagramLink).toHaveAttribute(
+      'href',
+      'https://www.instagram.com/owayx_k/',
+    );
+    expect(instagramLink).toHaveAttribute('target', '_blank');
+    expect(instagramLink).toHaveAttribute('rel', 'noopener noreferrer');
+
     // Check if email link is present
     const emailLink = screen.getByRole('link', { name: /email/i });
     expect(emailLink).toBeInTheDocument();
