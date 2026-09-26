@@ -12,7 +12,7 @@ are personal, so a fork needs a full rebrand.
 
 ## What is here
 
-- A statically exported Next.js 16 site deployed to GitHub Pages.
+- A statically exported Next.js 16 site deployed to Vercel.
 - A responsive light/dark design system built from semantic CSS tokens.
 - Markdown writing with drafts, RSS, and page metadata.
 - A filterable résumé that still prints in full.
@@ -101,9 +101,10 @@ build, and the exported site on every pull request.
 
 ## Deploy
 
-Pushes to `main` deploy the same static build that CI validates. See the
-[adapting guide](./docs/adapting-guide.md#deployment-reference) for URL and
-domain setup.
+Import the repository on [Vercel](https://vercel.com) with the default
+Next.js preset: `npm run build` produces the static export, and every push
+to `main` deploys it automatically. The canonical URL is compiled from
+`SITE_URL` in `src/lib/utils.ts` — update it if the domain changes.
 
 ## Contributing
 
