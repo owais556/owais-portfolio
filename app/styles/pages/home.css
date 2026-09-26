@@ -27,7 +27,10 @@
   min-width: 0;
 }
 
-/* Name */
+/* Name — stacked lockup: first name set solid, last name drawn as
+   an outline. The space between the two spans is display:block, so
+   it never renders; it keeps the h1's text content readable as one
+   name for assistive tech and tests. */
 .hero-title {
   margin: 0 0 1.25rem;
 }
@@ -40,8 +43,21 @@
   font-weight: var(--font-weight-black);
   letter-spacing: var(--tracking-display);
   line-height: var(--leading-display);
-  color: var(--color-fg-bold);
+  text-transform: uppercase;
   text-wrap: balance;
+}
+
+.hero-name-solid {
+  color: var(--color-fg-bold);
+}
+
+/* Transparent fill with a stroke in the bold ink. The lighter weight
+   keeps the outline line reading thinner than the solid one, per the
+   reference lockup. */
+.hero-name-outline {
+  color: transparent;
+  font-weight: var(--font-weight-semibold);
+  -webkit-text-stroke: 2px var(--color-fg-bold);
 }
 
 /* Tagline — set in the body serif at reading size, measure-constrained. */

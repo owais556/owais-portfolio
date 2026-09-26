@@ -4,13 +4,17 @@ import profile from '@/data/profile.json';
 
 import ThemePortrait from './ThemePortrait';
 
+const [firstName, ...lastNameParts] = profile.name.split(' ');
+const lastName = lastNameParts.join(' ');
+
 export default function Hero() {
   return (
     <section className="hero">
       <div className="hero-grid">
         <div className="hero-primary">
           <h1 className="hero-title">
-            <span className="hero-name">{profile.name}</span>
+            <span className="hero-name hero-name-solid">{firstName}</span>{' '}
+            <span className="hero-name hero-name-outline">{lastName}</span>
           </h1>
 
           <p className="hero-tagline">
