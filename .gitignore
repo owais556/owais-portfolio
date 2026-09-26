@@ -28,6 +28,7 @@ dist/
 tmp/
 out/
 public/dist/
+.vercel/
 
 # Next.js
 .next/
