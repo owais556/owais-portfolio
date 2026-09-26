@@ -6,29 +6,27 @@ import profile from '@/data/profile.json';
 import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion';
 
 // Animation timing constants
-const ANIMATION_TICK_MS = 50; // Tick length in milliseconds
-const HOLD_TICKS_AFTER_MESSAGE = 50; // Ticks to wait after message completes
+const ANIMATION_TICK_MS = 35; // Tick length in milliseconds
+const HOLD_TICKS_AFTER_MESSAGE = 30; // Ticks to wait after message completes
 
 /** The address the link always resolves to, whatever the animation shows. */
 const CONTACT_ADDRESS = profile.email;
 const [CONTACT_LOCAL_PART, CONTACT_DOMAIN] = CONTACT_ADDRESS.split('@');
 
 const messages = [
-  CONTACT_LOCAL_PART,
   'hello',
-  'hola',
-  'you-can-email-me-at-literally-anything! Really',
-  'well, not anything. But most things',
-  'like-this',
-  'or-this',
-  'but not this :(  ',
-  'you.can.also.email.me.with.specific.topics.like',
+  'hi-there',
+  'lets-connect',
+  'get-in-touch',
+  'say-salam',
+  'quick-question',
+  'about-a-project',
+  'web-development',
+  'it-support',
   'just-saying-hi',
-  'please-work-for-us',
-  'help',
-  'admin',
-  'or-I-really-like-your-website',
-  'thanks',
+  'thank-you',
+  // The real address closes the cycle so the animation lands on it and stays.
+  CONTACT_LOCAL_PART,
 ];
 
 function useInterval(callback: () => void, delay: number | null) {
@@ -130,14 +128,9 @@ interface EmailLinkProps {
 export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
   const reducedMotion = usePrefersReducedMotion();
 
-  // Opens on the real local part, already complete, so the first thing anyone
-  // sees is the actual address — and it holds there before the cycle starts.
-  const [state, dispatch] = useReducer(animationReducer, {
-    idx: 0,
-    message: CONTACT_LOCAL_PART,
-    char: messages[0].length,
-    isActive: true,
-  });
+  // The cycle leads with the greetings and lands on the real address, which
+  // then stands. Opening mid-type keeps the prefix non-empty from frame one.
+  const [state, dispatch] = useReducer(animationReducer, startOf(0));
 
   // If user prefers reduced motion, show static email immediately
   useEffect(() => {
@@ -157,6 +150,9 @@ export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
   // it is reduced motion, where the real address should simply stand.
   const displayMessage = reducedMotion ? CONTACT_LOCAL_PART : state.message;
 
+  // The domain belongs to the address alone — greeting aliases render without it.
+  const showDomain = displayMessage === CONTACT_LOCAL_PART;
+
   const handlePause = () => dispatch({ type: 'PAUSE' });
   const handleResume = () => {
     if (!reducedMotion) {
@@ -170,13 +166,10 @@ export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
       onMouseEnter={handlePause}
       onMouseLeave={handleResume}
     >
-      {/* Always a real link to a real address.
-          The animation cycles through joke aliases, three of which are not
-          valid local-parts ("but not this :(  " among them). Those used to
-          swap the anchor for an aria-disabled, unfocusable <span>, so for
-          roughly a fifth of the cycle the contact page offered no way to
-          reach anyone. The gag is now purely visual: the shown alias is
-          decorative and the destination never changes. */}
+      {/* Always a real link to a real address. Greetings cycle first and the
+          address lands last; the domain renders only alongside the complete
+          address. The shown text is decorative — the destination never
+          changes. */}
       <a
         href={`mailto:${CONTACT_ADDRESS}`}
         className="contact-email-link"
@@ -187,9 +180,11 @@ export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
         <span className="contact-email-prefix" aria-hidden="true">
           {displayMessage}
         </span>
-        <span className="contact-email-domain" aria-hidden="true">
-          @{CONTACT_DOMAIN}
-        </span>
+        {showDomain && (
+          <span className="contact-email-domain" aria-hidden="true">
+            @{CONTACT_DOMAIN}
+          </span>
+        )}
       </a>
     </div>
   );
