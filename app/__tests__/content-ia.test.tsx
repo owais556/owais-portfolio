@@ -15,9 +15,7 @@ describe('writing information architecture', () => {
     () => {
       render(<HomePage />);
 
-      expect(
-        screen.queryByRole('region', { name: 'Latest writing' }),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByRole('region', { name: 'Latest writing' })).not.toBeInTheDocument();
     },
   );
 
@@ -31,12 +29,13 @@ describe('writing information architecture', () => {
       const cards = container.querySelectorAll('.home-writing-item');
 
       expect(cards).toHaveLength(3);
-      expect(
-        [...cards].map((card) => card.querySelector('h3')?.textContent),
-      ).toEqual(expected.map((item) => item.title));
-      expect(
-        within(section).getByRole('link', { name: 'View all' }),
-      ).toHaveAttribute('href', '/writing');
+      expect([...cards].map((card) => card.querySelector('h3')?.textContent)).toEqual(
+        expected.map((item) => item.title),
+      );
+      expect(within(section).getByRole('link', { name: 'View all' })).toHaveAttribute(
+        'href',
+        '/writing',
+      );
     },
   );
 
@@ -59,9 +58,7 @@ describe('writing information architecture', () => {
           name: 'Selected writing elsewhere',
         }),
       ).not.toBeInTheDocument();
-      expect(
-        screen.queryByRole('heading', { level: 2, name: 'Guides' }),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByRole('heading', { level: 2, name: 'Guides' })).not.toBeInTheDocument();
     },
   );
 
@@ -83,9 +80,7 @@ describe('writing information architecture', () => {
         }),
       ).toBeInTheDocument();
 
-      expect(container.querySelectorAll('.writing-item h3')).toHaveLength(
-        getWritingItems().length,
-      );
+      expect(container.querySelectorAll('.writing-item h3')).toHaveLength(getWritingItems().length);
     },
   );
 
@@ -97,28 +92,24 @@ describe('writing information architecture', () => {
       const featured = container.querySelectorAll('.writing-item--featured');
 
       expect(featured).toHaveLength(1);
-      expect(featured[0]).toHaveAttribute('href', newest.url);
+      // Canonical URLs keep the trailing slash (see writing.test.ts), but the
+      // next/link render in jsdom drops it.
+      expect(featured[0]).toHaveAttribute('href', newest.url.replace(/\/$/, ''));
     },
   );
 
   it('shows provenance beside every external-link arrow', () => {
     const externalItems = getWritingItems().filter((item) => item.isExternal);
     const { container } = render(<WritingPage />);
-    const externalLinks = [
-      ...container.querySelectorAll('a.writing-item[target="_blank"]'),
-    ];
+    const externalLinks = [...container.querySelectorAll('a.writing-item[target="_blank"]')];
 
     expect(externalLinks).toHaveLength(externalItems.length);
     externalLinks.forEach((link, index) => {
-      expect(link.querySelector('.writing-source')).toHaveTextContent(
-        externalItems[index].source,
-      );
+      expect(link.querySelector('.writing-source')).toHaveTextContent(externalItems[index].source);
       expect(link.querySelector('.writing-external')).toHaveTextContent('↗');
       expect(link).toHaveAttribute('target', '_blank');
       expect(link).toHaveAttribute('rel', 'noopener noreferrer');
-      expect(link.querySelector('.sr-only')).toHaveTextContent(
-        'opens in a new tab',
-      );
+      expect(link.querySelector('.sr-only')).toHaveTextContent('opens in a new tab');
     });
   });
 });
