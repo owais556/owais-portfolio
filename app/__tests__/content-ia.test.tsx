@@ -30,7 +30,7 @@ describe('writing information architecture', () => {
       const section = screen.getByRole('region', { name: 'Latest writing' });
       const cards = container.querySelectorAll('.home-writing-item');
 
-      expect(cards).toHaveLength(3);
+      expect(cards).toHaveLength(expected.length);
       expect(
         [...cards].map((card) => card.querySelector('h3')?.textContent),
       ).toEqual(expected.map((item) => item.title));
@@ -68,23 +68,36 @@ describe('writing information architecture', () => {
   it.skipIf(getWritingItems().length === 0)(
     'groups owned essays, external articles, and guides under real headings',
     () => {
+      const items = getWritingItems();
+      // Sections render only when non-empty, so heading presence must track the data.
+      const groups = [
+        {
+          name: 'Essays on this site',
+          count: items.filter((item) => !item.isExternal).length,
+        },
+        {
+          name: 'Selected writing elsewhere',
+          count: items.filter((item) => item.isExternal && item.date).length,
+        },
+        {
+          name: 'Guides',
+          count: items.filter((item) => item.isExternal && !item.date).length,
+        },
+      ];
+
       const { container } = render(<WritingPage />);
 
-      expect(
-        screen.getByRole('heading', {
-          level: 2,
-          name: 'Essays on this site',
-        }),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByRole('heading', {
-          level: 2,
-          name: 'Selected writing elsewhere',
-        }),
-      ).toBeInTheDocument();
+      for (const { name, count } of groups) {
+        const heading = screen.queryByRole('heading', { level: 2, name });
+        if (count > 0) {
+          expect(heading).toBeInTheDocument();
+        } else {
+          expect(heading).not.toBeInTheDocument();
+        }
+      }
 
       expect(container.querySelectorAll('.writing-item h3')).toHaveLength(
-        getWritingItems().length,
+        items.length,
       );
     },
   );
@@ -97,7 +110,12 @@ describe('writing information architecture', () => {
       const featured = container.querySelectorAll('.writing-item--featured');
 
       expect(featured).toHaveLength(1);
-      expect(featured[0]).toHaveAttribute('href', newest.url);
+      // Canonical URLs keep the trailing slash (see writing.test.ts), but the
+      // next/link render in jsdom drops it.
+      expect(featured[0]).toHaveAttribute(
+        'href',
+        newest.url.replace(/\/$/, ''),
+      );
     },
   );
 

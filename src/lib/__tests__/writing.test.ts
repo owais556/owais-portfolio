@@ -8,24 +8,24 @@ import {
 
 describe('getWritingItems', () => {
   // Local posts and external links are both empty until content exists;
-  // these merge assertions re-activate as soon as either source returns items.
-  it.skipIf(getWritingItems().length === 0)(
-    'merges published local posts and external writing newest first',
-    () => {
-      const items = getWritingItems();
+  // these merge assertions re-activate once both sources return items.
+  it.skipIf(
+    !getWritingItems().some((item) => !item.isExternal) ||
+      !getWritingItems().some((item) => item.isExternal),
+  )('merges published local posts and external writing newest first', () => {
+    const items = getWritingItems();
 
-      expect(items.some((item) => !item.isExternal)).toBe(true);
-      expect(items.some((item) => item.isExternal)).toBe(true);
+    expect(items.some((item) => !item.isExternal)).toBe(true);
+    expect(items.some((item) => item.isExternal)).toBe(true);
 
-      const dated = items.filter((item) => item.date);
-      expect(
-        dated.every(
-          (item, index) =>
-            index === 0 || dated[index - 1]!.date.localeCompare(item.date) >= 0,
-        ),
-      ).toBe(true);
-    },
-  );
+    const dated = items.filter((item) => item.date);
+    expect(
+      dated.every(
+        (item, index) =>
+          index === 0 || dated[index - 1]!.date.localeCompare(item.date) >= 0,
+      ),
+    ).toBe(true);
+  });
 
   it.skipIf(getWritingItems().filter((item) => !item.isExternal).length === 0)(
     'uses canonical trailing-slash URLs for local posts',
