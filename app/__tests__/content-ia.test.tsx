@@ -15,7 +15,9 @@ describe('writing information architecture', () => {
     () => {
       render(<HomePage />);
 
-      expect(screen.queryByRole('region', { name: 'Latest writing' })).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('region', { name: 'Latest writing' }),
+      ).not.toBeInTheDocument();
     },
   );
 
@@ -28,14 +30,13 @@ describe('writing information architecture', () => {
       const section = screen.getByRole('region', { name: 'Latest writing' });
       const cards = container.querySelectorAll('.home-writing-item');
 
-      expect(cards).toHaveLength(3);
-      expect([...cards].map((card) => card.querySelector('h3')?.textContent)).toEqual(
-        expected.map((item) => item.title),
-      );
-      expect(within(section).getByRole('link', { name: 'View all' })).toHaveAttribute(
-        'href',
-        '/writing',
-      );
+      expect(cards).toHaveLength(expected.length);
+      expect(
+        [...cards].map((card) => card.querySelector('h3')?.textContent),
+      ).toEqual(expected.map((item) => item.title));
+      expect(
+        within(section).getByRole('link', { name: 'View all' }),
+      ).toHaveAttribute('href', '/writing');
     },
   );
 
@@ -58,29 +59,46 @@ describe('writing information architecture', () => {
           name: 'Selected writing elsewhere',
         }),
       ).not.toBeInTheDocument();
-      expect(screen.queryByRole('heading', { level: 2, name: 'Guides' })).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('heading', { level: 2, name: 'Guides' }),
+      ).not.toBeInTheDocument();
     },
   );
 
   it.skipIf(getWritingItems().length === 0)(
     'groups owned essays, external articles, and guides under real headings',
     () => {
+      const items = getWritingItems();
+      // Sections render only when non-empty, so heading presence must track the data.
+      const groups = [
+        {
+          name: 'Essays on this site',
+          count: items.filter((item) => !item.isExternal).length,
+        },
+        {
+          name: 'Selected writing elsewhere',
+          count: items.filter((item) => item.isExternal && item.date).length,
+        },
+        {
+          name: 'Guides',
+          count: items.filter((item) => item.isExternal && !item.date).length,
+        },
+      ];
+
       const { container } = render(<WritingPage />);
 
-      expect(
-        screen.getByRole('heading', {
-          level: 2,
-          name: 'Essays on this site',
-        }),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByRole('heading', {
-          level: 2,
-          name: 'Selected writing elsewhere',
-        }),
-      ).toBeInTheDocument();
+      for (const { name, count } of groups) {
+        const heading = screen.queryByRole('heading', { level: 2, name });
+        if (count > 0) {
+          expect(heading).toBeInTheDocument();
+        } else {
+          expect(heading).not.toBeInTheDocument();
+        }
+      }
 
-      expect(container.querySelectorAll('.writing-item h3')).toHaveLength(getWritingItems().length);
+      expect(container.querySelectorAll('.writing-item h3')).toHaveLength(
+        items.length,
+      );
     },
   );
 
@@ -94,22 +112,31 @@ describe('writing information architecture', () => {
       expect(featured).toHaveLength(1);
       // Canonical URLs keep the trailing slash (see writing.test.ts), but the
       // next/link render in jsdom drops it.
-      expect(featured[0]).toHaveAttribute('href', newest.url.replace(/\/$/, ''));
+      expect(featured[0]).toHaveAttribute(
+        'href',
+        newest.url.replace(/\/$/, ''),
+      );
     },
   );
 
   it('shows provenance beside every external-link arrow', () => {
     const externalItems = getWritingItems().filter((item) => item.isExternal);
     const { container } = render(<WritingPage />);
-    const externalLinks = [...container.querySelectorAll('a.writing-item[target="_blank"]')];
+    const externalLinks = [
+      ...container.querySelectorAll('a.writing-item[target="_blank"]'),
+    ];
 
     expect(externalLinks).toHaveLength(externalItems.length);
     externalLinks.forEach((link, index) => {
-      expect(link.querySelector('.writing-source')).toHaveTextContent(externalItems[index].source);
+      expect(link.querySelector('.writing-source')).toHaveTextContent(
+        externalItems[index].source,
+      );
       expect(link.querySelector('.writing-external')).toHaveTextContent('↗');
       expect(link).toHaveAttribute('target', '_blank');
       expect(link).toHaveAttribute('rel', 'noopener noreferrer');
-      expect(link.querySelector('.sr-only')).toHaveTextContent('opens in a new tab');
+      expect(link.querySelector('.sr-only')).toHaveTextContent(
+        'opens in a new tab',
+      );
     });
   });
 });
