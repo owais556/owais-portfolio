@@ -45,6 +45,8 @@ export const sharedOpenGraph: Metadata['openGraph'] = {
 export const sharedTwitter: Metadata['twitter'] = {
   card: 'summary_large_image',
   images: [SHARE_IMAGE_PATH],
+  site: '@owais556',
+  creator: '@owais556',
 };
 
 export function createPageMetadata({
