@@ -8,7 +8,12 @@ import { MAIN_CONTENT_ID } from '@/components/Template/PageWrapper';
 import ScrollToTop from '@/components/Template/ScrollToTop';
 import { sharedOpenGraph, sharedTwitter } from '@/lib/metadata';
 import { AUTHOR_NAME, SITE_DESCRIPTION, SITE_URL } from '@/lib/utils';
-import { bricolage, jetbrainsMono, newsreader } from './fonts';
+import {
+  bricolage,
+  jetbrainsMono,
+  newsreader,
+  newsreaderItalic,
+} from './fonts';
 import './tailwind.css';
 
 export const metadata: Metadata = {
@@ -64,7 +69,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${bricolage.variable} ${newsreader.variable} ${jetbrainsMono.variable}`}
+      className={`${bricolage.variable} ${newsreader.variable} ${jetbrainsMono.variable} ${newsreaderItalic.variable}`}
       suppressHydrationWarning
     >
       <head>
