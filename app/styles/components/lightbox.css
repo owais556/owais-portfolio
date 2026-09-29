@@ -1,0 +1,158 @@
+/* ========================================
+   PORTRAIT LIGHTBOX
+   The hero portrait, enlarged onto a fullscreen ink field.
+   The backdrop stays dark in both themes, so the chrome that sits
+   on it carries its own values rather than the theme tokens.
+   ======================================== */
+
+@keyframes portrait-lightbox-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes portrait-lightbox-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes portrait-lightbox-plate-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes portrait-lightbox-plate-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+@layer components {
+  .portrait-lightbox {
+    /* Ink in both themes, so these cannot be the theme tokens: they invert. */
+    --lightbox-paper: #fcfbf9;
+    --lightbox-veil: rgba(10, 12, 16, 0.88);
+    --lightbox-hairline: rgba(252, 251, 249, 0.28);
+
+    animation: portrait-lightbox-in var(--duration-normal) var(--ease-out) both;
+    inset: 0;
+    position: fixed;
+    z-index: var(--z-overlay);
+  }
+
+  .portrait-lightbox--closing {
+    animation: portrait-lightbox-out var(--duration-fast) var(--ease-out) both;
+  }
+
+  .portrait-lightbox-backdrop {
+    background: var(--lightbox-veil);
+    inset: 0;
+    position: absolute;
+  }
+
+  /* Full-bleed but transparent to the pointer, so a click in the margin
+     around the plate falls through to the backdrop and closes. */
+  .portrait-lightbox-dialog {
+    display: grid;
+    inset: 0;
+    padding: 1rem;
+    place-items: center;
+    pointer-events: none;
+    position: absolute;
+  }
+
+  /* A print mounted on paper, not the hero frame enlarged. The plate is
+     paper in both themes on purpose: the multiply below needs a white field
+     to disappear into, and following --color-bg would multiply the photograph
+     into near-black on ink. `isolation` keeps that blend on the plate instead
+     of reaching the veil behind it. */
+  .portrait-lightbox-plate {
+    animation: portrait-lightbox-plate-in var(--duration-normal) var(--ease-out) both;
+    background: var(--lightbox-paper);
+    border: var(--rule) solid var(--lightbox-hairline);
+    isolation: isolate;
+    line-height: 0;
+    margin: 0;
+    max-width: 100%;
+    padding: 0.5rem;
+    pointer-events: auto;
+  }
+
+  .portrait-lightbox--closing .portrait-lightbox-plate {
+    animation: portrait-lightbox-plate-out var(--duration-fast) var(--ease-out) both;
+  }
+
+  /* No filter, ever. The hero's greyscale grade is a hover reveal and belongs
+     to `.hero-portrait img` in home.css; opening the lightbox is the visitor
+     asking to see the photograph, so it shows the source pixels. Multiply
+     against white is the identity, so the image comes through unaltered and
+     only its white field drops into the plate.
+
+     `width`/`height` stay auto so the intrinsic 1:1 ratio survives the clamp,
+     and the two caps account for the dialog padding, the plate padding and its
+     hairline — never a percentage of an auto-width parent, which does not
+     resolve. */
+  .portrait-lightbox-plate img {
+    display: block;
+    height: auto;
+    max-height: min(calc(100dvh - 8rem), 780px);
+    max-width: min(calc(100vw - 4rem), 780px);
+    mix-blend-mode: multiply;
+    width: auto;
+  }
+
+  .portrait-lightbox-close {
+    align-items: center;
+    background: transparent;
+    border: var(--rule) solid var(--lightbox-hairline);
+    border-radius: var(--radius-sm);
+    color: var(--lightbox-paper);
+    cursor: pointer;
+    display: flex;
+    font-size: 1.5rem;
+    height: 44px;
+    justify-content: center;
+    line-height: 1;
+    opacity: 0.82;
+    padding: 0;
+    pointer-events: auto;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    transition:
+      opacity var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
+    width: 44px;
+  }
+
+  .portrait-lightbox-close:hover {
+    border-color: var(--lightbox-paper);
+    opacity: 1;
+  }
+
+  /* The global focus ring is accent-coloured, which measures 2.7:1 against
+     the veil. On ink, the ring has to be paper. */
+  .portrait-lightbox-close:focus-visible {
+    opacity: 1;
+    outline: var(--rule-strong) solid var(--lightbox-paper);
+    outline-offset: 2px;
+  }
+}

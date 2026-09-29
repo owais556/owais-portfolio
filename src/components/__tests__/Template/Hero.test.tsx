@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
+import { SITE_IMAGE_PATH } from '../../../lib/utils';
 import Hero from '../../Template/Hero';
 
 describe('Hero', () => {
@@ -18,11 +19,17 @@ describe('Hero', () => {
     expect(heading).toHaveTextContent('Muhammad Owais');
   });
 
-  it('describes the current role, employer, and focus', () => {
+  // Neither string can come from profile.json: the eyebrow drops Customer
+  // Service, which `profile.focus` still carries for the resume and the
+  // footer, and the sentence no longer names an employer at all.
+  it('leads with the discipline list, then the positioning sentence', () => {
     const { container } = render(<Hero />);
 
+    expect(container.querySelector('.hero-eyebrow')).toHaveTextContent(
+      'Administration | Digital & IT Support | Web Development',
+    );
     expect(container.querySelector('.hero-tagline')).toHaveTextContent(
-      "I'm a Clerk at Asim Higher Secondary School in Tando Muhammad Khan, Sindh, Pakistan, working across Administration, Customer Service, Digital & IT Support, and Web Development.",
+      'I build modern digital experiences using web technologies and AI-assisted development, combining technical problem-solving with practical experience in digital operations, documentation, and administrative workflows.',
     );
   });
 
@@ -65,5 +72,26 @@ describe('Hero', () => {
     const bg = document.querySelector('.hero-bg');
     expect(bg).toBeInTheDocument();
     expect(bg).toHaveAttribute('aria-hidden', 'true');
+  });
+
+  // The lightbox itself is covered in HeroPortrait.test.tsx; this only pins
+  // that the hero still hands the framed portrait to a dialog trigger, and
+  // that nothing is mounted until it is used.
+  it('renders the portrait as a closed dialog trigger', () => {
+    const { container } = render(<Hero />);
+
+    const trigger = container.querySelector(
+      '.hero-portrait > button.hero-portrait-trigger',
+    );
+    expect(trigger).toBeInTheDocument();
+    expect(trigger).toHaveAttribute('aria-haspopup', 'dialog');
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    expect(trigger?.querySelector('.theme-portrait > img')).toHaveAttribute(
+      'src',
+      SITE_IMAGE_PATH,
+    );
+    expect(
+      document.querySelector('.portrait-lightbox'),
+    ).not.toBeInTheDocument();
   });
 });

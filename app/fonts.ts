@@ -37,9 +37,11 @@ export const jetbrainsMono = localFont({
 });
 
 /**
- * Long-form writing is the only current surface that uses authored italics.
- * Its separate route-level instance avoids preloading a 64 KB face on every
- * page while preserving a real italic rather than browser synthesis.
+ * Authored italics: the long-form prose in `app/writing` and the hero tagline.
+ * `preload: false` is what keeps a 64 KB face off every page's critical path —
+ * the variable may hang off `<html>` because defining a custom property costs
+ * nothing, and only the pages that actually set `font-style: italic` download
+ * the file. Without this face those pages get a browser-synthesized oblique.
  */
 export const newsreaderItalic = localFont({
   src: '../node_modules/@fontsource-variable/newsreader/files/newsreader-latin-wght-italic.woff2',

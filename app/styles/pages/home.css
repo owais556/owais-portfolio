@@ -53,16 +53,50 @@
 
 /* Transparent fill with a stroke in the bold ink. The lighter weight
    keeps the outline line reading thinner than the solid one, per the
-   reference lockup. */
+   reference lockup.
+
+   The tracking is what stretches five letters across the width of the eight
+   above them. letter-spacing is applied after every glyph including the last,
+   so aligning the two lines' final-glyph edges means solving
+   `advances(OWAIS) + 4L = advances(MUHAMMAD) + 7 × --tracking-display` for L.
+   Both spans share a font-size and the advance ratio between the two weights
+   is fixed, so L is a pure ratio: 0.74275em measured identically at 390, 641,
+   940 and 1280px. Re-derive it if the display face or either weight changes. */
 .hero-name-outline {
   color: transparent;
   font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.74275em;
   -webkit-text-stroke: 2px var(--color-fg-bold);
 }
 
-/* Tagline — set in the body serif at reading size, measure-constrained. */
+/* Discipline list — bold in the body serif it inherits, tracked so its last
+   glyph lands on the OWAIS "S" above it.
+
+   OWAIS is a fixed string at `letter-spacing: 0.74275em` on `--text-display`,
+   so its ink width is a fixed multiple of that token — 6.2121em, measured the
+   same from 390px to 1440px. This line's width is its advance sum plus 54
+   gaps, and a fixed string in a fixed face has a fixed advance sum in em
+   (26.339 here), which is why the body's 18px→16px step at 768px needs no
+   second case. Solving `54L = 6.2121 × --text-display − 26.339em` gives the
+   calc below; `max(0px, …)` stops it going negative once the OWAIS line
+   becomes narrower than this one can be at readable tracking, around 850px.
+   Re-derive both constants if the display face, its tracking, or this wording
+   changes. */
+.hero-eyebrow {
+  display: block;
+  margin: 0 0 0.75rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-fg-bold);
+  letter-spacing: max(0px, calc(var(--text-display) * 0.11504 - 0.48776em));
+}
+
+/* Tagline — set in the body serif at reading size, measure-constrained.
+   The italic has to name the real Newsreader italic face: without it the
+   browser synthesizes an oblique, which is what `app/fonts.ts` loads a
+   separate face to avoid. */
 .hero-tagline {
-  font-family: var(--font-body);
+  font-family: var(--font-newsreader-italic), var(--font-body);
+  font-style: italic;
   font-size: var(--text-lg);
   color: var(--color-fg);
   max-width: 46ch;
@@ -135,7 +169,7 @@
    layout cannot use without reading as a profile card. */
 .hero-portrait {
   position: relative;
-  width: 280px;
+  width: 330px;
   max-width: 100%;
   border: var(--rule) solid var(--color-border);
   background: var(--color-bg);
@@ -184,6 +218,38 @@
   }
 }
 
+/* Trigger — the frame's contents became clickable, so a button now sits
+   between them and the padding. It resets to nothing: any border, padding or
+   line box of its own would move the portrait, and any transform or opacity
+   would create the stacking context that `mix-blend-mode: multiply` on the
+   img depends on not existing. */
+.hero-portrait-trigger {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  cursor: zoom-in;
+  display: block;
+  font: inherit;
+  line-height: 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.hero-portrait-trigger:focus-visible {
+  outline: var(--rule-strong) solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Keyboard focus develops the portrait exactly the way hover does. */
+.hero-portrait-trigger:focus-visible img {
+  filter: grayscale(0) contrast(1);
+}
+
+[data-theme='dark'] .hero-portrait-trigger:focus-visible img {
+  filter: grayscale(0) brightness(0.78) contrast(1);
+}
+
 /* ========================================
    HERO BACKGROUND
    A faint ruled field, drawn to the same hairline weight as
@@ -218,7 +284,7 @@
   }
 
   .hero-portrait {
-    width: 220px;
+    width: 258px;
   }
 
   .hero-name {
